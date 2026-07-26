@@ -3,11 +3,10 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Loader from "../components/Loader";
 import { getPictureOfTheDay } from "../services/nasaApi";
-import "../styles/PictureDay.css";
-import "../styles/Video.css";
 import { saveFavorite } from "../utils/favorites";
 
-
+import "../styles/PictureDay.css";
+import "../styles/Video.css";
 
 function PictureDay() {
   const [picture, setPicture] = useState(null);
@@ -17,9 +16,17 @@ function PictureDay() {
     async function fetchPicture() {
       try {
         const data = await getPictureOfTheDay();
+
+        console.log("NASA Response:", data);
+
         setPicture(data);
       } catch (error) {
-        console.log(error);
+        console.error("NASA API Error:", error);
+
+        if (error.response) {
+          console.error("Status:", error.response.status);
+          console.error("Data:", error.response.data);
+        }
       } finally {
         setLoading(false);
       }
@@ -28,33 +35,17 @@ function PictureDay() {
     fetchPicture();
   }, []);
 
-  // Save to Favorites
   const handleFavorite = () => {
     if (!picture) return;
 
-    const favorites =
-      JSON.parse(localStorage.getItem("favorites")) || [];
-
-    const exists = favorites.find(
-      (item) => item.date === picture.date
-    );
-
-    if (exists) {
-      alert("Already in Favorites ❤️");
+    if (picture.media_type !== "image") {
+      alert("Only images can be added to Favorites.");
       return;
     }
 
-    favorites.push(picture);
-
-    localStorage.setItem(
-      "favorites",
-      JSON.stringify(favorites)
-    );
-
-    alert("Added to Favorites ❤️");
+    saveFavorite(picture);
   };
 
-  // Loading
   if (loading) {
     return (
       <>
@@ -64,11 +55,11 @@ function PictureDay() {
     );
   }
 
-  // Error
   if (!picture) {
     return (
       <>
         <Navbar />
+
         <div
           style={{
             textAlign: "center",
@@ -77,7 +68,10 @@ function PictureDay() {
           }}
         >
           <h2>Unable to load NASA Picture.</h2>
+
+          <p>Please try again later.</p>
         </div>
+
         <Footer />
       </>
     );
@@ -94,34 +88,34 @@ function PictureDay() {
         <p className="date">{picture.date}</p>
 
         {picture.media_type === "image" ? (
-  <img
-    src={picture.url}
-    alt={picture.title}
-    className="picture"
-  />
-) : picture.url.endsWith(".mp4") ? (
-  <video
-    className="video-player"
-    controls
-    preload="metadata"
-  >
-    <source
-      src={picture.url}
-      type="video/mp4"
-    />
-    Your browser does not support the video tag.
-  </video>
-) : (
-  <div className="video-container">
-    <iframe
-      src={picture.url}
-      title={picture.title}
-      className="video-player"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-    />
-  </div>
-)}
+          <img
+            src={picture.url}
+            alt={picture.title}
+            className="picture"
+          />
+        ) : picture.url.endsWith(".mp4") ? (
+          <video
+            className="video-player"
+            controls
+            autoPlay={false}
+          >
+            <source
+              src={picture.url}
+              type="video/mp4"
+            />
+            Your browser does not support the video tag.
+          </video>
+        ) : (
+          <div className="video-container">
+            <iframe
+              src={picture.url}
+              title={picture.title}
+              className="video-player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        )}
 
         <button
           className="save-btn"
