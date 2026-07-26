@@ -1,0 +1,30 @@
+.stats{
+    width:90%;
+    margin:80px auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:25px;
+}
+
+.stat{
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(10px);
+    border-radius:18px;
+    padding:30px;
+    text-align:center;
+    transition:.3s;
+}
+
+.stat:hover{
+    transform:scale(1.05);
+}
+
+.stat h1{
+    color:#00d9ff;
+    font-size:42px;
+}
+
+.stat p{
+    color:white;
+    margin-top:10px;
+}

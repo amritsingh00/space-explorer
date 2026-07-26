@@ -1,0 +1,100 @@
+.features{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+
+    gap:30px;
+
+    padding:50px;
+
+    max-width:1200px;
+
+    margin:auto;
+}
+
+.feature-card{
+
+    background:rgba(255,255,255,.08);
+
+    backdrop-filter:blur(15px);
+
+    border:1px solid rgba(255,255,255,.15);
+
+    border-radius:20px;
+
+    padding:30px;
+
+    transition:.4s;
+    
+    cursor:pointer;
+
+    text-align:center;
+}
+
+.feature-card:hover{
+
+transform:translateY(-15px) scale(1.04);
+
+box-shadow:
+
+0 0 30px cyan,
+
+0 0 60px blue;
+
+}
+
+.feature-card h2{
+
+    color:#00d9ff;
+
+    margin-bottom:20px;
+}
+
+.feature-card{
+
+transition:.5s;
+
+cursor:pointer;
+
+}
+
+.feature-btn{
+
+    display:inline-block;
+
+    padding:12px 25px;
+
+    background:#00d9ff;
+
+    color:#050816;
+
+    border-radius:10px;
+
+    font-weight:bold;
+
+    transition:.3s;
+}
+
+.feature-link{
+    text-decoration:none;
+    color:white;
+    display:block;
+}
+.feature-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 22px;
+  background: #00c8ff;
+  color: white;
+  text-decoration: none;
+  border-radius: 30px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.feature-btn:hover {
+  background: #0099cc;
+  transform: translateY(-3px);
+  box-shadow: 0 0 15px #00c8ff;
+}

@@ -1,0 +1,43 @@
+.details-container {
+  max-width: 900px;
+  margin: 50px auto;
+  padding: 20px;
+  color: white;
+  text-align: center;
+}
+
+.details-image {
+  width: 100%;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+}
+
+.details-text {
+  margin-top: 20px;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+.back-btn {
+  padding: 10px 25px;
+  border: none;
+  border-radius: 25px;
+  background: #00bfff;
+  color: white;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.back-btn:hover {
+  background: #009acd;
+}
+.details-video{
+    width:100%;
+    max-width:900px;
+    border-radius:20px;
+    margin:25px auto;
+    display:block;
+    box-shadow:0 0 25px rgba(0,255,255,.3);
+}
