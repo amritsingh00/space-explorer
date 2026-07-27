@@ -3,9 +3,11 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import axios from "axios";
 import { saveFavorite } from "../utils/favorites";
-import "../styles/PictureDay.css";
 
-// Same API key used in nasaApi.js
+import "../styles/PictureDay.css";
+import "../styles/SearchByDate.css";
+import "../styles/Video.css";
+
 const API_KEY = "TWQCBs4K4Wh4S6YrB9l4LWi9IiuNJ5EruNf5WkZA";
 
 function SearchByDate() {
@@ -34,46 +36,45 @@ function SearchByDate() {
         console.log(error.response.data);
       }
 
-      alert("Unable to load NASA picture.");
+      alert("Unable to load NASA Picture.");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
     <>
       <Navbar />
 
-      <div
-        style={{
-          textAlign: "center",
-          padding: "40px",
-          color: "white",
-        }}
-      >
+      <div className="search-page">
+
         <h1>📅 Search NASA Picture by Date</h1>
 
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
+        <div className="search-controls">
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+          />
 
-        <button
-          className="save-btn"
-          onClick={searchPhoto}
-          style={{ marginLeft: "15px" }}
-        >
-          Search
-        </button>
+          <button
+            className="save-btn"
+            onClick={searchPhoto}
+          >
+            🔍 Search
+          </button>
+        </div>
 
-        {loading && <h2>Loading...</h2>}
+        {loading && (
+          <h2>Loading...</h2>
+        )}
 
         {photo && (
-          <>
+          <div className="search-result">
+
             <h2>{photo.title}</h2>
 
-            <p>{photo.date}</p>
+            <p className="date">{photo.date}</p>
 
             {photo.media_type === "image" ? (
               <img
@@ -83,13 +84,14 @@ function SearchByDate() {
               />
             ) : photo.url.endsWith(".mp4") ? (
               <video
-                controls
                 className="video-player"
+                controls
               >
                 <source
                   src={photo.url}
                   type="video/mp4"
                 />
+                Your browser does not support the video tag.
               </video>
             ) : (
               <iframe
@@ -112,8 +114,10 @@ function SearchByDate() {
             <p className="description">
               {photo.explanation}
             </p>
-          </>
+
+          </div>
         )}
+
       </div>
 
       <Footer />
