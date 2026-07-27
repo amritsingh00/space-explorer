@@ -3,14 +3,24 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import axios from "axios";
 import { saveFavorite } from "../utils/favorites";
+import "../styles/PictureDay.css";
 
-const API_KEY = import.meta.env.VITE_NASA_API_KEY;
+// Same API key used in nasaApi.js
+const API_KEY = "TWQCBs4K4Wh4S6YrB9l4LWi9IiuNJ5EruNf5WkZA";
 
 function SearchByDate() {
   const [date, setDate] = useState("");
   const [photo, setPhoto] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const searchPhoto = async () => {
+    if (!date) {
+      alert("Please select a date.");
+      return;
+    }
+
+    setLoading(true);
+
     try {
       const response = await axios.get(
         `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&date=${date}`
@@ -18,17 +28,30 @@ function SearchByDate() {
 
       setPhoto(response.data);
     } catch (error) {
-      console.log(error);
-      alert("No picture found.");
+      console.error(error);
+
+      if (error.response) {
+        console.log(error.response.data);
+      }
+
+      alert("Unable to load NASA picture.");
     }
+
+    setLoading(false);
   };
 
   return (
     <>
       <Navbar />
 
-      <div style={{ textAlign: "center", padding: "40px" }}>
-        <h1>📅 Search NASA Picture</h1>
+      <div
+        style={{
+          textAlign: "center",
+          padding: "40px",
+          color: "white",
+        }}
+      >
+        <h1>📅 Search NASA Picture by Date</h1>
 
         <input
           type="date"
@@ -36,27 +59,59 @@ function SearchByDate() {
           onChange={(e) => setDate(e.target.value)}
         />
 
-        <button onClick={searchPhoto}>
+        <button
+          className="save-btn"
+          onClick={searchPhoto}
+          style={{ marginLeft: "15px" }}
+        >
           Search
         </button>
+
+        {loading && <h2>Loading...</h2>}
 
         {photo && (
           <>
             <h2>{photo.title}</h2>
 
-            <img
-              src={photo.url}
-              width="600"
-              alt={photo.title}
-            />
-            <button
-            className="save-btn"
-            onClick={() => saveFavorite(photo)}
-            >
-            ❤️ Save
-            </button>
+            <p>{photo.date}</p>
 
-            <p>{photo.explanation}</p>
+            {photo.media_type === "image" ? (
+              <img
+                src={photo.url}
+                alt={photo.title}
+                className="picture"
+              />
+            ) : photo.url.endsWith(".mp4") ? (
+              <video
+                controls
+                className="video-player"
+              >
+                <source
+                  src={photo.url}
+                  type="video/mp4"
+                />
+              </video>
+            ) : (
+              <iframe
+                src={photo.url}
+                title={photo.title}
+                className="video-player"
+                allowFullScreen
+              />
+            )}
+
+            {photo.media_type === "image" && (
+              <button
+                className="save-btn"
+                onClick={() => saveFavorite(photo)}
+              >
+                ❤️ Save to Favorites
+              </button>
+            )}
+
+            <p className="description">
+              {photo.explanation}
+            </p>
           </>
         )}
       </div>
